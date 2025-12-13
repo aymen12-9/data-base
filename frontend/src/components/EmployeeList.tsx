@@ -8,7 +8,7 @@ import * as EmployeeTypes from '../types/employee';
 
 // Puis utilisez
 type Employee = EmployeeTypes.Employee;
-import { employeeApi } from '../services/api';
+import { employeeApi, getApiBaseUrl } from '../services/api';
 import PersonIcon from '@mui/icons-material/Person';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
@@ -26,11 +26,15 @@ const EmployeeList: React.FC = () => {
   const fetchEmployees = async () => {
     try {
       setLoading(true);
+      if (!getApiBaseUrl()) {
+        throw new Error('VITE_API_URL not configured; set VITE_API_URL in public/config.json or in build environment.');
+      }
       const response = await employeeApi.getAllEmployees();
       setEmployees(response.data);
       setError(null);
-    } catch (err) {
-      setError('Erreur lors du chargement des employés');
+    } catch (err: any) {
+      const msg = err?.message || 'Erreur lors du chargement des employés';
+      setError(msg);
       console.error(err);
     } finally {
       setLoading(false);

@@ -26,7 +26,7 @@ import WorkHistoryIcon from '@mui/icons-material/WorkHistory';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import AttachMoneyIcon from '@mui/icons-material/AttachMoney';
 import InsightsIcon from '@mui/icons-material/Insights';
-import { employeeApi } from '../services/api';
+import { employeeApi, getApiBaseUrl } from '../services/api';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip as RechartsTooltip, Legend, ResponsiveContainer, PieChart, Pie, Cell } from 'recharts';
 
 const StatsDashboard: React.FC = () => {
@@ -50,6 +50,9 @@ const StatsDashboard: React.FC = () => {
   const fetchStats = async () => {
     try {
       setLoading(true);
+      if (!getApiBaseUrl()) {
+        throw new Error('VITE_API_URL not configured; set it in public/config.json or in the build environment (netlify.toml).');
+      }
       const employeesResponse = await employeeApi.getAllEmployees();
       const employees = employeesResponse.data;
       
@@ -111,7 +114,8 @@ const StatsDashboard: React.FC = () => {
       
       setError(null);
     } catch (err: any) {
-      setError('Erreur lors du chargement des statistiques');
+      const msg = err?.message || 'Erreur lors du chargement des statistiques';
+      setError(msg);
       console.error(err);
     } finally {
       setLoading(false);

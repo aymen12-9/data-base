@@ -24,7 +24,7 @@ import LocationOnIcon from '@mui/icons-material/LocationOn';
 import PersonIcon from '@mui/icons-material/Person';
 import WorkIcon from '@mui/icons-material/Work';
 import EuroIcon from '@mui/icons-material/Euro';
-import { employeeApi } from '../services/api';
+import { employeeApi, getApiBaseUrl } from '../services/api';
 
 const EmployeeForm: React.FC = () => {
   const [employee, setEmployee] = useState({
@@ -75,7 +75,9 @@ const EmployeeForm: React.FC = () => {
       if (!employee.nom || !employee.prenom) {
         throw new Error('Le nom et le prénom sont obligatoires');
       }
-
+      if (!getApiBaseUrl()) {
+        throw new Error('VITE_API_URL not configured; set it in public/config.json or in the build environment.');
+      }
       await employeeApi.addEmployee(employee);
       setSuccess(true);
       setEmployee({

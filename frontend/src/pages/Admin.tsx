@@ -26,7 +26,7 @@ import {
   Select,
   MenuItem
 } from '@mui/material';
-import { employeeApi } from '../services/api';
+import { employeeApi, getApiBaseUrl } from '../services/api';
 import EditIcon from '@mui/icons-material/Edit';
 import DeleteIcon from '@mui/icons-material/Delete';
 import AddIcon from '@mui/icons-material/Add';
@@ -67,11 +67,14 @@ const Admin: React.FC = () => {
   const fetchEmployees = async () => {
     setLoading(true);
     try {
+      if (!getApiBaseUrl()) {
+        throw new Error('VITE_API_URL not configured; set it in public/config.json or in the build environment (netlify.toml).');
+      }
       const response = await employeeApi.getAllEmployees();
       setEmployees(response.data);
       setError(null);
     } catch (err: any) {
-      setError('Erreur lors du chargement des employés');
+      setError(err.message || 'Erreur lors du chargement des employés');
       console.error(err);
     } finally {
       setLoading(false);

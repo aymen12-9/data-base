@@ -71,3 +71,9 @@ export default defineConfig([
   },
 ])
 ```
+
+## Deployment / Netlify
+
+- Ensure `VITE_API_URL` is set in Netlify environment variables (or in `netlify.toml`) to your Render backend URL (for example: `https://data-base-43fk.onrender.com/api`).
+- Do not deploy a pre-built `dist` folder that was built locally with `localhost` as fallback. Build on the CI (Netlify) so that `VITE_API_URL` is substituted at build-time.
+- If `VITE_API_URL` is missing, the app will not attempt to connect to your local machine; it will show an explicit configuration error in the connection status.

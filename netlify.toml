@@ -1,0 +1,18 @@
+[build]
+  # Build command runs in the repository root. Use npm --prefix or cd into frontend.
+  # This ensures Netlify builds the React app instead of trying to run Hugo.
+  command = "cd frontend && npm ci && npm run build"
+  publish = "frontend/dist"
+
+[[redirects]]
+  from = "/*"
+  to = "/index.html"
+  status = 200
+
+[build.environment]
+  # Optional: set this for build-time env (used as fallback only)
+  VITE_API_URL = "https://data-base-43fk.onrender.com/api"
+
+[context.production.environment]
+  # Production-specific overrides
+  VITE_API_URL = "https://data-base-43fk.onrender.com/api"

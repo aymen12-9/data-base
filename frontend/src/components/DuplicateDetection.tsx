@@ -4,7 +4,7 @@ import {
   Chip, Table, TableBody, TableCell, TableContainer, TableHead, TableRow,
   IconButton, Collapse, LinearProgress
 } from '@mui/material';
-import { employeeApi } from '../services/api';
+import { employeeApi, getApiBaseUrl } from '../services/api';
 import { Doublon } from '../types/employee';
 import WarningIcon from '@mui/icons-material/Warning';
 import PersonIcon from '@mui/icons-material/Person';
@@ -25,6 +25,7 @@ const DuplicateDetection: React.FC = () => {
   const fetchDoublons = async () => {
     try {
       setLoading(true);
+      if (!getApiBaseUrl()) throw new Error('VITE_API_URL not configured; set it in public/config.json or in the build environment.');
       const response = await employeeApi.getDoublons();
       setDoublons(response.data);
       setError(null);

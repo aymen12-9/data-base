@@ -5,7 +5,7 @@ import {
   TableCell, TableContainer, TableHead, TableRow
 } from '@mui/material';
 import { BarChart, Bar, XAxis, YAxis, CartesianGrid, Tooltip, Legend, ResponsiveContainer } from 'recharts';
-import { employeeApi } from '../services/api';
+import { employeeApi, getApiBaseUrl } from '../services/api';
 import { VilleStats } from '../types/employee';
 import LocationCityIcon from '@mui/icons-material/LocationCity';
 import PeopleIcon from '@mui/icons-material/People';
@@ -24,6 +24,7 @@ const CityAnalysis: React.FC = () => {
   const fetchStats = async () => {
     try {
       setLoading(true);
+      if (!getApiBaseUrl()) throw new Error('VITE_API_URL not configured; set it in public/config.json or in the build environment.');
       const response = await employeeApi.getVilleStats();
       setStats(response.data);
       setError(null);
